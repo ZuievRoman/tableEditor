@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<table id="grid">
+    <thead>
+    <th>&nbsp;</th>
+    <th v-for="col in options.cols">{{col | columnName}}</th>
+    </thead>
+    <tbody>
+    <tr v-for="row in options.rows">
+        <td>
+            {{row}}
+        </td>
+        <td v-for="item in  options.cols">
+            <!--<span v-on:click="editCell(item,$event)">{{item}}</span>-->
+            {{grid[$parent.item][item].value}}
+        </td>
+    </tr>
+    </tbody>
+</table>
+<input ref="inputCell" v-model="currentCell"/>
+<script src="./node_modules/vue/dist/vue.min.js"></script>
+<style>
+    table,table thead th,tbody tr td{
+        border:1px solid black;
+        padding: 15px;
+    }
+</style>
+<script>
+    var app = new Vue({
+        el: '#grid',
+        data:{
+            options: {
+                rows: 5,
+                cols: 5
+            },
+            grid:[],
+            currentCell: null,
+        },
+        filters: {
+            columnName: function (col) {
+                return String.fromCharCode(65 + col - 1);
+            }
+        },
+        methods:{
+            editCell: function (cell, event) {
+                var td = event.target.parentNode;
+
+                td.appendChild(
+                    this.$refs.inputCell
+                );
+
+                this.currentCell = cell;
+                
+            }
+        }
+    })
+</script>
+</body>
+</html>
